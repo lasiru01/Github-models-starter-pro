@@ -8,6 +8,7 @@ jobs:
   award-badge:
     runs-on: ubuntu-latest
     
+    # Only run if the issue has the 'submission' label
     if: contains(github.event.issue.labels.*.name, 'submission')
     
     steps:
@@ -60,27 +61,27 @@ jobs:
             const badgeUrl = `${repoUrl}/raw/main/Images/badge.png`;
             
             const comment = `🎊 **Congratulations, @${context.payload.issue.user.login}!**
-            
-            This issue has been closed, which means you have **successfully completed this task!** 🎉
-            
-            ## 🏆 Your Digital Badge
-            
-            ![Digital Badge](${badgeUrl})
-            
-            ## 📢 Share Your Achievement
-            
-            You can showcase your knowledge and share this accomplishment on:
-            - 💼 **LinkedIn** - Add this to your profile or share as a post
-            - 🐦 **Twitter/X** - Tweet about your achievement
-            - 📱 **Other Social Media** - Instagram, Facebook, etc.
-            
-            **Reference Link:** ${issueUrl}
-            
-            Feel free to mention that you've completed this assessment and link to this issue as proof of your work!
-            
-            ---
-            
-            Keep up the excellent work! 🚀✨`;
+
+This issue has been closed, which means you have **successfully completed this task!** 🎉
+
+## 🏆 Your Digital Badge
+
+![Digital Badge](${badgeUrl})
+
+## 📢 Share Your Achievement
+
+You can showcase your knowledge and share this accomplishment on:
+- 💼 **LinkedIn** - Add this to your profile or share as a post
+- 🐦 **Twitter/X** - Tweet about your achievement
+- 📱 **Other Social Media** - Instagram, Facebook, etc.
+
+**Reference Link:** ${issueUrl}
+
+Feel free to mention that you've completed this assessment and link to this issue as proof of your work!
+
+---
+
+Keep up the excellent work! 🚀✨`;
 
             const commentResponse = await github.rest.issues.createComment({
               owner: context.repo.owner,

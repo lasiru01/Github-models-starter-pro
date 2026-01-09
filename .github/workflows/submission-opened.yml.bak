@@ -8,6 +8,7 @@ jobs:
   process-submission:
     runs-on: ubuntu-latest
     
+    # Only run if the issue has the 'submission' label
     if: contains(github.event.issue.labels.*.name, 'submission')
     
     steps:
@@ -53,17 +54,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const comment = `🎉 **Issue Created Successfully!**
-            
-            Hi @${context.payload.issue.user.login}! 
-            
-            Your submission has been received and is ready for review.
-            
-            **Issue Details:**
-            - **Issue Number:** #${context.issue.number}
-            - **Assigned to:** @nisalgunawardhana
-            - **Labels:** submission, pending-review
-            
-            Thank you for your submission! We'll review it as soon as possible. 🚀`;
+
+Hi @${context.payload.issue.user.login}! 
+
+Your submission has been received and is ready for review.
+
+**Issue Details:**
+- **Issue Number:** #${context.issue.number}
+- **Assigned to:** @nisalgunawardhana
+- **Labels:** submission, pending-review
+
+Thank you for your submission! We'll review it as soon as possible. 🚀`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
