@@ -8,7 +8,10 @@ jobs:
   award-badge:
     runs-on: ubuntu-latest
     
-    if: contains(github.event.issue.labels.*.name, 'submission')
+    # Only run if issue has 'submission' label AND closed by nisalgunawardhana
+    if: |
+      contains(github.event.issue.labels.*.name, 'submission') &&
+      github.event.sender.login == 'nisalgunawardhana'
     
     steps:
       - name: Checkout repository

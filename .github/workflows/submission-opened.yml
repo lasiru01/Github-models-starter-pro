@@ -47,6 +47,26 @@ jobs:
               assignees: ['nisalgunawardhana']
             });
       
+      - name: Update issue title with username
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const username = context.payload.issue.user.login;
+            const currentTitle = context.payload.issue.title;
+            
+            // Update title to include username if not already there
+            if (!currentTitle.includes(username)) {
+              const newTitle = `[Submission] @${username}`;
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                title: newTitle
+              });
+            }
+      
       - name: Add success comment
         uses: actions/github-script@v7
         with:
