@@ -8,7 +8,10 @@ jobs:
   process-submission:
     runs-on: ubuntu-latest
     
-    if: contains(github.event.issue.labels.*.name, 'submission')
+    # Check if issue title contains [Submission] or has submission label
+    if: |
+      contains(github.event.issue.title, '[Submission]') ||
+      contains(github.event.issue.labels.*.name, 'submission')
     
     steps:
       - name: Add labels
@@ -47,25 +50,32 @@ jobs:
               assignees: ['nisalgunawardhana']
             });
       
-      - name: Update issue title with username
+      - name: Update issue title with full name
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const issueBody = context.payload.issue.body;
             const username = context.payload.issue.user.login;
-            const currentTitle = context.payload.issue.title;
             
-            // Update title to include username if not already there
-            if (!currentTitle.includes(username)) {
-              const newTitle = `[Submission] @${username}`;
-              
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                title: newTitle
-              });
+            // Extract Full Name from issue body
+            const nameMatch = issueBody.match(/###\s*Full Name\s*([^#]+)/i);
+            let fullName = nameMatch ? nameMatch[1].trim() : username;
+            
+            // If name is empty or just whitespace, use username
+            if (!fullName || fullName === '') {
+              fullName = username;
             }
+            
+            // Create title with full name
+            const newTitle = `[Submission] ${fullName}`;
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              title: newTitle
+            });
       
       - name: Add success comment
         uses: actions/github-script@v7

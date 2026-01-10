@@ -1,6 +1,6 @@
 name: Submission
 description: Submit your assessment for review
-title: "[Submission] "
+title: "[Submission] Your Name"
 labels: ["submission", "pending-review"]
 assignees: ["nisalgunawardhana"]
 body:
