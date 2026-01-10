@@ -4,6 +4,10 @@ on:
   issues:
     types: [closed]
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   award-badge:
     runs-on: ubuntu-latest
